@@ -317,7 +317,7 @@ def cadastrar_exercicio(treinos, exercicios):
             print("\nTreino não encontrado.")
             return
 
-        nome = input("Nome do exercício: ")
+        nome = input("Nome do exercício(ex: agachamento, supino, corida, abdominal, flexão): ")
         series = input("Quantidade de séries: ")
         repeticoes = input("Repetições: ")
         observacao = input("Tempo, distância ou observação: ")
@@ -387,7 +387,7 @@ def cadastrar_meta(metas):
     print("=== CADASTRAR META ===")
 
     descricao = input("Descrição da meta: ")
-    tipo = input("Tipo da meta (perder peso, ganhar massa, condicionamento): ")
+    tipo = input("Tipo da meta (perder peso, ganhar massa, condicionamento, treinar mais vezes): ")
     prazo = input("Prazo da meta (dd/mm/aaaa): ")
 
     meta = {
