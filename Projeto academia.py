@@ -5,6 +5,7 @@ from datetime import datetime
 ARQUIVO_TREINOS = "treinos.txt"
 ARQUIVO_EXERCICIOS = "exercicios.txt"
 ARQUIVO_METAS = "metas.txt"
+ARQUIVO_EVOLUCAO = "evolucao.txt"
 
 
 # -------------------------------
@@ -128,6 +129,26 @@ def carregar_metas():
 
     return metas
 
+def carregar_metas_concluidas():
+    try:
+        arquivo = open(ARQUIVO_EVOLUCAO, "r", encoding="utf-8")
+        conteudo = arquivo.read().strip()
+        arquivo.close()
+        
+        if conteudo == "":
+            return 0
+        return int(conteudo)
+    except (FileNotFoundError, ValueError):
+
+        return 0
+
+def somar_metas_concluida():
+    metas_concluidas = carregar_metas_concluidas()
+    metas_concluidas += 1
+
+    arquivo = open(ARQUIVO_EVOLUCAO, "w", encoding="utf-8")
+    arquivo.write(str(metas_concluidas))
+    arquivo.close()
 
 # -------------------------------
 # Salvar dados nos arquivos
@@ -431,8 +452,12 @@ def concluir_meta(metas):
 
         for meta in metas:
             if meta["id"] == id_meta:
+                if meta["status"] == "Concluída":
+                    print("\nEsta meta já foi concluída anteriormente!")
+                    return
                 meta["status"] = "Concluída"
                 salvar_metas(metas)
+                somar_metas_concluida()
                 print("\nMeta marcada como concluída!")
                 return
 
@@ -526,6 +551,18 @@ def menu_metas(metas):
             print("\nOpção inválida.")
             pausar()
 
+def menu_evolucao(treinos, metas):
+    limpar_tela()
+    print("=== MENU DE EVOLUÇÃO ===")
+
+
+    print(f"Treinos cadastrados: {len(treinos)}")
+    print(f"Metas cadastradas: {len(metas)}")
+    print(f"Metas concluídas: {carregar_metas_concluidas()}")
+
+
+    pausar()
+
 
 # -------------------------------
 # Programa principal
@@ -545,6 +582,7 @@ def main():
         print("1 - Planos de treino")
         print("2 - Exercícios")
         print("3 - Metas")
+        print("4 - Evolução")
         print("0 - Sair")
 
         opcao = ler_opcao()
@@ -555,6 +593,8 @@ def main():
             menu_exercicios(treinos, exercicios)
         elif opcao == 3:
             menu_metas(metas)
+        elif opcao == 4:
+            menu_evolucao(treinos, metas)
         elif opcao == 0:
             print("\nSaindo do FitPlanner...")
             break
